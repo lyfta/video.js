@@ -1,3 +1,7 @@
+Lyfta fork of Video.js to allow for some customisations.
+
+* * *
+
 ![Video.js logo][logo]
 
 # [Video.js - HTML5 Video Player][vjs]
