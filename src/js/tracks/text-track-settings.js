@@ -18,6 +18,7 @@ const COLOR_MAGENTA = ['#F0F', 'Magenta'];
 const COLOR_RED = ['#F00', 'Red'];
 const COLOR_WHITE = ['#FFF', 'White'];
 const COLOR_YELLOW = ['#FF0', 'Yellow'];
+const COLOR_ORANGE = ['#FA0', 'Orange'];
 
 const OPACITY_OPAQUE = ['1', 'Opaque'];
 const OPACITY_SEMI = ['0.5', 'Semi-Transparent'];
@@ -47,7 +48,8 @@ const selectConfigs = {
       COLOR_BLUE,
       COLOR_YELLOW,
       COLOR_MAGENTA,
-      COLOR_CYAN
+      COLOR_CYAN,
+      COLOR_ORANGE
     ]
   },
 
@@ -74,7 +76,8 @@ const selectConfigs = {
       COLOR_BLUE,
       COLOR_YELLOW,
       COLOR_MAGENTA,
-      COLOR_CYAN
+      COLOR_CYAN,
+      COLOR_ORANGE
     ]
   },
 
