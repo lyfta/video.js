@@ -226,15 +226,15 @@ function getSelectedOptionValue(el, parser) {
  *
  * @private
  */
-function setSelectedOption(el, value, parser) {
-  this.player_.log('joe test - setSelectedOption');
-  this.player_.log('joe test - setSelectedOption, value:', value);
+function setSelectedOption(el, value, parser, player) {
+  player.log('joe test - setSelectedOption');
+  player.log('joe test - setSelectedOption, value:', value);
   if (!value) {
     return;
   }
 
   for (let i = 0; i < el.options.length; i++) {
-    this.player_.log('joe test - setSelectedOption, parseOptionValue(el.options[i].value, parser):', parseOptionValue(el.options[i].value, parser));
+    player.log('joe test - setSelectedOption, parseOptionValue(el.options[i].value, parser):', parseOptionValue(el.options[i].value, parser));
     if (parseOptionValue(el.options[i].value, parser) === value) {
       el.selectedIndex = i;
       break;
@@ -546,7 +546,7 @@ class TextTrackSettings extends ModalDialog {
       // this.player_.log('joe test - values[key]:', values[key]);
       // this.player_.log('joe test - config.parser:', config.parser);
       // this.player_.log('joe test /');
-      setSelectedOption(this.$(config.selector), values[key], config.parser);
+      setSelectedOption(this.$(config.selector), values[key], config.parser, this.player_);
     });
   }
 
