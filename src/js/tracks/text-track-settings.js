@@ -526,12 +526,12 @@ class TextTrackSettings extends ModalDialog {
    */
   setValues(values) {
     Obj.each(selectConfigs, (config, key) => {
-      console.log("joe test - config:", config)
-      console.log("joe test - key:", key)
-      console.log("joe test - this.$(config.selector):", this.$(config.selector))
-      console.log("joe test - values[key]:", values[key])
-      console.log("joe test - config.parser:", config.parser)
-      console.log("joe test /")
+      log.info('joe test - config:', config);
+      log.info('joe test - key:', key);
+      log.info('joe test - this.$(config.selector):', this.$(config.selector));
+      log.info('joe test - values[key]:', values[key]);
+      log.info('joe test - config.parser:', config.parser);
+      log.info('joe test /');
       setSelectedOption(this.$(config.selector), values[key], config.parser);
     });
   }
