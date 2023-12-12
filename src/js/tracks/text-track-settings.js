@@ -205,6 +205,9 @@ function parseOptionValue(value, parser) {
 function getSelectedOptionValue(el, parser) {
   const value = el.options[el.options.selectedIndex].value;
 
+  // this.player_.log("joe test - getSelectedOption")
+  // this.player_.log("joe test - getSelectedOption, value:", value)
+
   return parseOptionValue(value, parser);
 }
 
@@ -224,11 +227,14 @@ function getSelectedOptionValue(el, parser) {
  * @private
  */
 function setSelectedOption(el, value, parser) {
+  this.player_.log('joe test - setSelectedOption');
+  this.player_.log('joe test - setSelectedOption, value:', value);
   if (!value) {
     return;
   }
 
   for (let i = 0; i < el.options.length; i++) {
+    this.player_.log('joe test - setSelectedOption, parseOptionValue(el.options[i].value, parser):', parseOptionValue(el.options[i].value, parser));
     if (parseOptionValue(el.options[i].value, parser) === value) {
       el.selectedIndex = i;
       break;
@@ -508,13 +514,13 @@ class TextTrackSettings extends ModalDialog {
    */
   getValues() {
     return Obj.reduce(selectConfigs, (accum, config, key) => {
-      this.player_.log('joe test - getValues');
-      this.player_.log('joe test - accum:', accum);
-      this.player_.log('joe test - config:', config);
-      this.player_.log('joe test - key:', key);
-      this.player_.log('joe test - this.$(config.selector):', this.$(config.selector));
-      this.player_.log('joe test - config.parser:', config.parser);
-      this.player_.log('joe test /');
+      // this.player_.log('joe test - getValues');
+      // this.player_.log('joe test - accum:', accum);
+      // this.player_.log('joe test - config:', config);
+      // this.player_.log('joe test - key:', key);
+      // this.player_.log('joe test - this.$(config.selector):', this.$(config.selector));
+      // this.player_.log('joe test - config.parser:', config.parser);
+      // this.player_.log('joe test /');
       const value = getSelectedOptionValue(this.$(config.selector), config.parser);
 
       if (value !== undefined) {
@@ -533,13 +539,13 @@ class TextTrackSettings extends ModalDialog {
    */
   setValues(values) {
     Obj.each(selectConfigs, (config, key) => {
-      this.player_.log('joe test - setValues');
-      this.player_.log('joe test - config:', config);
-      this.player_.log('joe test - key:', key);
-      this.player_.log('joe test - this.$(config.selector):', this.$(config.selector));
-      this.player_.log('joe test - values[key]:', values[key]);
-      this.player_.log('joe test - config.parser:', config.parser);
-      this.player_.log('joe test /');
+      // this.player_.log('joe test - setValues');
+      // this.player_.log('joe test - config:', config);
+      // this.player_.log('joe test - key:', key);
+      // this.player_.log('joe test - this.$(config.selector):', this.$(config.selector));
+      // this.player_.log('joe test - values[key]:', values[key]);
+      // this.player_.log('joe test - config.parser:', config.parser);
+      // this.player_.log('joe test /');
       setSelectedOption(this.$(config.selector), values[key], config.parser);
     });
   }
