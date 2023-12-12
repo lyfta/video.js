@@ -205,8 +205,7 @@ function parseOptionValue(value, parser) {
 function getSelectedOptionValue(el, parser) {
   const value = el.options[el.options.selectedIndex].value;
 
-  // this.player_.log("joe test - getSelectedOption")
-  // this.player_.log("joe test - getSelectedOption, value:", value)
+  this.player_.log('joe test - getSelectedOption, value:', value, ' | parseOptionValue(value, parser):', parseOptionValue(value, parser));
 
   return parseOptionValue(value, parser);
 }
@@ -227,8 +226,7 @@ function getSelectedOptionValue(el, parser) {
  * @private
  */
 function setSelectedOption(el, value, parser, player) {
-  player.log('joe test - setSelectedOption');
-  player.log('joe test - setSelectedOption, value:', value);
+  player.log('joe test - setSelectedOption, el:', el, ' | value:', value);
   if (!value) {
     return;
   }
