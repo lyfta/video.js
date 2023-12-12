@@ -202,7 +202,7 @@ function parseOptionValue(value, parser) {
  *
  * @private
  */
-function getSelectedOptionValue(el, parser) {
+function getSelectedOptionValue(el, parser, player) {
   const value = el.options[el.options.selectedIndex].value;
 
   this.player_.log('joe test - getSelectedOption, value:', value, ' | parseOptionValue(value, parser):', parseOptionValue(value, parser));
@@ -519,7 +519,7 @@ class TextTrackSettings extends ModalDialog {
       // this.player_.log('joe test - this.$(config.selector):', this.$(config.selector));
       // this.player_.log('joe test - config.parser:', config.parser);
       // this.player_.log('joe test /');
-      const value = getSelectedOptionValue(this.$(config.selector), config.parser);
+      const value = getSelectedOptionValue(this.$(config.selector), config.parser, this.player_);
 
       if (value !== undefined) {
         accum[key] = value;
