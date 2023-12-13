@@ -130,10 +130,7 @@ const selectConfigs = {
     // special case for '1.00' (100%), and just always return the value. I'm
     // not sure if there was a particular reason for sometimes returning null,
     // but this change doesn't seem to break anything.
-    // parser: (v) => Number(v)
-    // Joe note: despite claiming to return null here, it seems this returns
-    // undefined? Looking into parseOptionValue for clues as to why.
-    parser: (v) => v === '1.00' ? 'foobar' : Number(v)
+    parser: (v) => Number(v)
   },
 
   textOpacity: {
@@ -184,15 +181,9 @@ selectConfigs.windowColor.options = selectConfigs.backgroundColor.options;
  *
  * @private
  */
-function parseOptionValue(value, parser, player) {
-  if (player) {
-    player.log('joe test - parseOptionValue, value:', value);
-  }
+function parseOptionValue(value, parser) {
   if (parser) {
     value = parser(value);
-    if (player) {
-      player.log('joe test - parseOptionValue, parser(value):', parser(value));
-    }
   }
 
   if (value && value !== 'none') {
@@ -216,10 +207,8 @@ function parseOptionValue(value, parser, player) {
  *
  * @private
  */
-function getSelectedOptionValue(el, parser, player) {
+function getSelectedOptionValue(el, parser) {
   const value = el.options[el.options.selectedIndex].value;
-
-  player.log('joe test - setSelectedOption, value:', value, ' | parseOptionValue(value, parser):', parseOptionValue(value, parser));
 
   return parseOptionValue(value, parser);
 }
@@ -240,26 +229,19 @@ function getSelectedOptionValue(el, parser, player) {
  * @private
  */
 function setSelectedOption(el, value, parser, player) {
-  player.log('joe test - setSelectedOption, el:', el, ' | value:', value);
   // Joe note: there's a problem here (given how we use VJS's "not really real
-  // API"). This tests if "value" is truthy, but the (default) fontPercent
+  // API"). This tests if "value" is falsy, but the (default) fontPercent
   // parser (above) will return "null" for 1.00 (100%). This means the for
   // loop below will *never* match the value we're trying to (need to) set to
-  // return the font size to 100% - this function returns before it can run.
-  // if (!value) {
-  //   return;
-  // }
-  // Joe note: one alternative is to use null, as the parser expects, and
-  // change this comparison to strictly undefined:
-  if (value === undefined) {
+  // return the font size to 100% - setSelectedOption returns before it runs.
+  if (!value) {
     return;
   }
 
   for (let i = 0; i < el.options.length; i++) {
     // Joe note: remember, this is comparing the value of EACH option in the
     // list, *after* parsing, with the value supplied to the setSelectedOption
-    // call. i.e. the post-parser value and the supplie value must match.
-    player.log('joe test - setSelectedOption, parseOptionValue(el.options[i].value, parser):', parseOptionValue(el.options[i].value, parser));
+    // call. i.e. the post-parser value and the supplied value must match.
     if (parseOptionValue(el.options[i].value, parser, player) === value) {
       el.selectedIndex = i;
       break;
@@ -539,7 +521,7 @@ class TextTrackSettings extends ModalDialog {
    */
   getValues() {
     return Obj.reduce(selectConfigs, (accum, config, key) => {
-      const value = getSelectedOptionValue(this.$(config.selector), config.parser, this.player_);
+      const value = getSelectedOptionValue(this.$(config.selector), config.parser);
 
       if (value !== undefined) {
         accum[key] = value;
@@ -557,7 +539,7 @@ class TextTrackSettings extends ModalDialog {
    */
   setValues(values) {
     Obj.each(selectConfigs, (config, key) => {
-      setSelectedOption(this.$(config.selector), values[key], config.parser, this.player_);
+      setSelectedOption(this.$(config.selector), values[key], config.parser);
     });
   }
 
