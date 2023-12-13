@@ -131,6 +131,8 @@ const selectConfigs = {
     // not sure if there was a particular reason for sometimes returning null,
     // but this change doesn't seem to break anything.
     // parser: (v) => Number(v)
+    // Joe note: despite claiming to return null here, it seems this returns
+    // undefined? Looking into parseOptionValue for clues as to why.
     parser: (v) => v === '1.00' ? null : Number(v)
   },
 
@@ -182,9 +184,15 @@ selectConfigs.windowColor.options = selectConfigs.backgroundColor.options;
  *
  * @private
  */
-function parseOptionValue(value, parser) {
+function parseOptionValue(value, parser, player) {
+  if (player) {
+    player.log('joe test - parseOptionValue, value:', value);
+  }
   if (parser) {
     value = parser(value);
+    if (player) {
+      player.log('joe test - parseOptionValue, parser(value):', parser(value));
+    }
   }
 
   if (value && value !== 'none') {
@@ -248,8 +256,11 @@ function setSelectedOption(el, value, parser, player) {
   }
 
   for (let i = 0; i < el.options.length; i++) {
+    // Joe note: remember, this is comparing the value of EACH option in the
+    // list, *after* parsing, with the value supplied to the setSelectedOption
+    // call. i.e. the post-parser value and the supplie value must match.
     player.log('joe test - setSelectedOption, parseOptionValue(el.options[i].value, parser):', parseOptionValue(el.options[i].value, parser));
-    if (parseOptionValue(el.options[i].value, parser) === value) {
+    if (parseOptionValue(el.options[i].value, parser, this.player_) === value) {
       el.selectedIndex = i;
       break;
     }
