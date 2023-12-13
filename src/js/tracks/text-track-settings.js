@@ -260,7 +260,7 @@ function setSelectedOption(el, value, parser, player) {
     // list, *after* parsing, with the value supplied to the setSelectedOption
     // call. i.e. the post-parser value and the supplie value must match.
     player.log('joe test - setSelectedOption, parseOptionValue(el.options[i].value, parser):', parseOptionValue(el.options[i].value, parser));
-    if (parseOptionValue(el.options[i].value, parser, this.player_) === value) {
+    if (parseOptionValue(el.options[i].value, parser, player) === value) {
       el.selectedIndex = i;
       break;
     }
