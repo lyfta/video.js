@@ -125,7 +125,8 @@ const selectConfigs = {
       ['4.00', '400%']
     ],
     default: 2,
-    parser: (v) => v === '1.00' ? null : Number(v)
+    parser: (v) => Number(v)
+    // parser: (v) => v === '1.00' ? null : Number(v)
   },
 
   textOpacity: {
@@ -227,9 +228,17 @@ function getSelectedOptionValue(el, parser, player) {
  */
 function setSelectedOption(el, value, parser, player) {
   player.log('joe test - setSelectedOption, el:', el, ' | value:', value);
+  // Joe note: OK, I *think* the problem (for me) is here: this tests if value
+  // is truthy, but the fontPercent parser will return null for 1.00 (100%) -
+  // meaning the for loop below will *never* match the value we're trying to
+  // set. You can either change this if OR change the parser (I'm not sure
+  // why it wants to work with null, anyway?)
   if (!value) {
     return;
   }
+  // if (value === undefined) {
+  //   return;
+  // }
 
   for (let i = 0; i < el.options.length; i++) {
     player.log('joe test - setSelectedOption, parseOptionValue(el.options[i].value, parser):', parseOptionValue(el.options[i].value, parser));
