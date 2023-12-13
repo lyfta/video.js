@@ -125,8 +125,13 @@ const selectConfigs = {
       ['4.00', '400%']
     ],
     default: 2,
-    parser: (v) => Number(v)
-    // parser: (v) => v === '1.00' ? null : Number(v)
+    // Joe note: as a workaround to the issue described here
+    // https://github.com/videojs/video.js/issues/6143, we remove the parser's
+    // special case for '1.00' (100%), and just always return the value. I'm
+    // not sure if there was a particular reason for sometimes returning null,
+    // but this change doesn't seem to break anything.
+    // parser: (v) => Number(v)
+    parser: (v) => v === '1.00' ? null : Number(v)
   },
 
   textOpacity: {
@@ -203,10 +208,8 @@ function parseOptionValue(value, parser) {
  *
  * @private
  */
-function getSelectedOptionValue(el, parser, player) {
+function getSelectedOptionValue(el, parser) {
   const value = el.options[el.options.selectedIndex].value;
-
-  player.log('joe test - getSelectedOption, value:', value, ' | parseOptionValue(value, parser):', parseOptionValue(value, parser));
 
   return parseOptionValue(value, parser);
 }
@@ -226,22 +229,22 @@ function getSelectedOptionValue(el, parser, player) {
  *
  * @private
  */
-function setSelectedOption(el, value, parser, player) {
-  player.log('joe test - setSelectedOption, el:', el, ' | value:', value);
-  // Joe note: OK, I *think* the problem (for me) is here: this tests if value
-  // is truthy, but the fontPercent parser will return null for 1.00 (100%) -
-  // meaning the for loop below will *never* match the value we're trying to
-  // set. You can either change this if OR change the parser (I'm not sure
-  // why it wants to work with null, anyway?)
-  if (!value) {
-    return;
-  }
-  // if (value === undefined) {
+function setSelectedOption(el, value, parser) {
+  // Joe note: there's a problem here (given how we use VJS's "not really real
+  // API"). This tests if "value" is truthy, but the (default) fontPercent
+  // parser (above) will return "null" for 1.00 (100%). This means the for
+  // loop below will *never* match the value we're trying to (need to) set to
+  // return the font size to 100% - this function returns before it can run.
+  // if (!value) {
   //   return;
   // }
+  // Joe note: one alternative is to use null, as the parser expects, and
+  // change this comparison to strictly undefined:
+  if (value === undefined) {
+    return;
+  }
 
   for (let i = 0; i < el.options.length; i++) {
-    player.log('joe test - setSelectedOption, parseOptionValue(el.options[i].value, parser):', parseOptionValue(el.options[i].value, parser));
     if (parseOptionValue(el.options[i].value, parser) === value) {
       el.selectedIndex = i;
       break;
