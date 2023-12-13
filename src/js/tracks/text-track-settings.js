@@ -208,8 +208,10 @@ function parseOptionValue(value, parser) {
  *
  * @private
  */
-function getSelectedOptionValue(el, parser) {
+function getSelectedOptionValue(el, parser, player) {
   const value = el.options[el.options.selectedIndex].value;
+
+  player.log('joe test - setSelectedOption, value:', value, ' | parseOptionValue(value, parser):', parseOptionValue(value, parser));
 
   return parseOptionValue(value, parser);
 }
@@ -229,7 +231,8 @@ function getSelectedOptionValue(el, parser) {
  *
  * @private
  */
-function setSelectedOption(el, value, parser) {
+function setSelectedOption(el, value, parser, player) {
+  player.log('joe test - setSelectedOption, value:', value);
   // Joe note: there's a problem here (given how we use VJS's "not really real
   // API"). This tests if "value" is truthy, but the (default) fontPercent
   // parser (above) will return "null" for 1.00 (100%). This means the for
@@ -245,6 +248,7 @@ function setSelectedOption(el, value, parser) {
   }
 
   for (let i = 0; i < el.options.length; i++) {
+    player.log('joe test - setSelectedOption, parseOptionValue(el.options[i].value, parser):', parseOptionValue(el.options[i].value, parser));
     if (parseOptionValue(el.options[i].value, parser) === value) {
       el.selectedIndex = i;
       break;
@@ -524,13 +528,6 @@ class TextTrackSettings extends ModalDialog {
    */
   getValues() {
     return Obj.reduce(selectConfigs, (accum, config, key) => {
-      // this.player_.log('joe test - getValues');
-      // this.player_.log('joe test - accum:', accum);
-      // this.player_.log('joe test - config:', config);
-      // this.player_.log('joe test - key:', key);
-      // this.player_.log('joe test - this.$(config.selector):', this.$(config.selector));
-      // this.player_.log('joe test - config.parser:', config.parser);
-      // this.player_.log('joe test /');
       const value = getSelectedOptionValue(this.$(config.selector), config.parser, this.player_);
 
       if (value !== undefined) {
@@ -549,13 +546,6 @@ class TextTrackSettings extends ModalDialog {
    */
   setValues(values) {
     Obj.each(selectConfigs, (config, key) => {
-      // this.player_.log('joe test - setValues');
-      // this.player_.log('joe test - config:', config);
-      // this.player_.log('joe test - key:', key);
-      // this.player_.log('joe test - this.$(config.selector):', this.$(config.selector));
-      // this.player_.log('joe test - values[key]:', values[key]);
-      // this.player_.log('joe test - config.parser:', config.parser);
-      // this.player_.log('joe test /');
       setSelectedOption(this.$(config.selector), values[key], config.parser, this.player_);
     });
   }
