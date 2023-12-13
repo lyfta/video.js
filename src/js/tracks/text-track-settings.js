@@ -133,7 +133,7 @@ const selectConfigs = {
     // parser: (v) => Number(v)
     // Joe note: despite claiming to return null here, it seems this returns
     // undefined? Looking into parseOptionValue for clues as to why.
-    parser: (v) => v === '1.00' ? null : Number(v)
+    parser: (v) => v === '1.00' ? 'foobar' : Number(v)
   },
 
   textOpacity: {
@@ -240,7 +240,7 @@ function getSelectedOptionValue(el, parser, player) {
  * @private
  */
 function setSelectedOption(el, value, parser, player) {
-  player.log('joe test - setSelectedOption, value:', value);
+  player.log('joe test - setSelectedOption, el:', el, ' | value:', value);
   // Joe note: there's a problem here (given how we use VJS's "not really real
   // API"). This tests if "value" is truthy, but the (default) fontPercent
   // parser (above) will return "null" for 1.00 (100%). This means the for
