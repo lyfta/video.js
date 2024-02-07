@@ -18,6 +18,7 @@ const COLOR_MAGENTA = ['#F0F', 'Magenta'];
 const COLOR_RED = ['#F00', 'Red'];
 const COLOR_WHITE = ['#FFF', 'White'];
 const COLOR_YELLOW = ['#FF0', 'Yellow'];
+const COLOR_ORANGE = ['#FA0', 'Orange'];
 
 const OPACITY_OPAQUE = ['1', 'Opaque'];
 const OPACITY_SEMI = ['0.5', 'Semi-Transparent'];
@@ -47,7 +48,8 @@ const selectConfigs = {
       COLOR_BLUE,
       COLOR_YELLOW,
       COLOR_MAGENTA,
-      COLOR_CYAN
+      COLOR_CYAN,
+      COLOR_ORANGE
     ]
   },
 
@@ -74,7 +76,8 @@ const selectConfigs = {
       COLOR_BLUE,
       COLOR_YELLOW,
       COLOR_MAGENTA,
-      COLOR_CYAN
+      COLOR_CYAN,
+      COLOR_ORANGE
     ]
   },
 
@@ -122,7 +125,12 @@ const selectConfigs = {
       ['4.00', '400%']
     ],
     default: 2,
-    parser: (v) => v === '1.00' ? null : Number(v)
+    // Joe note: as a workaround to the issue described here
+    // https://github.com/videojs/video.js/issues/6143, we remove the parser's
+    // special case for '1.00' (100%), and just always return the value. I'm
+    // not sure if there was a particular reason for sometimes returning null,
+    // but this change doesn't seem to break anything.
+    parser: (v) => Number(v)
   },
 
   textOpacity: {
@@ -220,13 +228,21 @@ function getSelectedOptionValue(el, parser) {
  *
  * @private
  */
-function setSelectedOption(el, value, parser) {
+function setSelectedOption(el, value, parser, player) {
+  // Joe note: there's a problem here (given how we use VJS's "not really real
+  // API"). This tests if "value" is falsy, but the (default) fontPercent
+  // parser (above) will return "null" for 1.00 (100%). This means the for
+  // loop below will *never* match the value we're trying to (need to) set to
+  // return the font size to 100% - setSelectedOption returns before it runs.
   if (!value) {
     return;
   }
 
   for (let i = 0; i < el.options.length; i++) {
-    if (parseOptionValue(el.options[i].value, parser) === value) {
+    // Joe note: remember, this is comparing the value of EACH option in the
+    // list, *after* parsing, with the value supplied to the setSelectedOption
+    // call. i.e. the post-parser value and the supplied value must match.
+    if (parseOptionValue(el.options[i].value, parser, player) === value) {
       el.selectedIndex = i;
       break;
     }
